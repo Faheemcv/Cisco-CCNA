@@ -1,0 +1,33 @@
+Day 2 - Extended Network Cabling and Design Topology
+This lab demonstrates an extended enterprise network topology in Cisco Packet Tracer, integrating routers, switches, PCs, and a server in a multi-tiered architecture. The topology simulates a realistic scenario using appropriate cable types based on physical distance and connection type.
+
+Devices Used:
+4 × Cisco 2911 Routers (R1, R2, R3, R4)
+
+8 × Cisco 2960 Switches (SW1 to SW8)
+
+3 × PCs (PC1, PC2, PC3)
+
+1 × Server (SRV1)
+
+Key Connections & Cable Types:
+R1 ↔ R2 (50m): Copper cable (Crossover if MDI-X disabled)
+
+R1 ↔ R3 (3km): Fiber Optic – Single-Mode (suitable for long-distance backbone connection)
+
+R3 ↔ R4 (250m): Fiber Optic – Multimode (used for medium distance)
+
+R2 ↔ SW1/SW2, R4 ↔ SW5/SW6: Copper Ethernet cables (Crossover or Straight-through based on port configuration)
+
+SW1 ↔ SW2, SW5 ↔ SW6: Inter-switch links
+
+SW3/SW4/SW7/SW8 ↔ PCs/Server: Ethernet cables (Straight-through)
+
+Learning Objectives:
+Apply correct cable types based on device and distance (Copper, Single-mode, Multimode Fiber)
+
+Practice manual cabling with Auto MDI-X disabled
+
+Design scalable hierarchical topologies (core, distribution, access layers)
+
+Understand physical limitations and practical cabling rules in enterprise networking
