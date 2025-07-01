@@ -1,0 +1,96 @@
+MAC Address Table Learning and Verification Lab
+
+This lab focuses on how Cisco switches learn MAC addresses dynamically by observing network traffic. You will generate traffic between devices using pings, verify MAC address tables, and practice clearing dynamic MAC entries.
+
+Devices Used:
+
+• 2 × Cisco 2960 Switches (SW1, SW2)
+• 4 × PCs (PC1, PC2, PC3, PC4)
+
+Learning Objectives:
+
+• Understand how switches build MAC address tables dynamically
+• Use ping and ARP to generate traffic and populate MAC tables
+• View the learned MAC addresses on switches using CLI
+• Clear dynamic MAC address entries for re-testing
+• Analyze switch behavior with an empty MAC table
+
+Network Diagram:
+
+• IP Range: 192.168.1.0/24
+
+• PC1: 192.168.1.1 → SW1 (F0/1)
+
+• PC2: 192.168.1.2 → SW1 (F0/2)
+
+• SW1 ↔ SW2 via G0/1 (on both)
+
+• PC3: 192.168.1.3 → SW2 (F0/1)
+
+• PC4: 192.168.1.4 → SW2 (F0/2)
+
+Tasks & Commands:
+1. If PC1 pings PC3, what happens?
+
+• PC1 sends an ARP Request (broadcast) to learn PC3’s MAC.
+
+• All devices (PC2, SW1, SW2, PC3, PC4) receive it.
+
+• PC3 replies with its MAC.
+
+• PC1 stores PC3’s MAC in its ARP table.
+
+• Switches learn MAC addresses from traffic.
+
+2. Simulate the ping to PC3 using Simulation Mode:
+
+On PC1:
+ping 192.168.1.3
+
+• Open Simulation Mode and observe:
+
+• ARP request → ARP reply → ICMP Echo Request → Echo Reply
+
+• MAC tables start filling with dynamic entries.
+
+3. Use ping from all PCs to generate traffic:
+
+On each PC:
+
+ping [other PC IP]
+
+Examples:
+
+• PC1 → PC4
+
+• PC2 → PC3
+
+• PC3 → PC1
+
+This forces all switches to learn MAC addresses of each device.
+
+4. View MAC address tables on switches:
+
+• On SW1:
+
+  SW1# show mac address-table
+
+• On SW2:
+
+SW2# show mac address-table
+5. Clear the MAC address tables:
+
+On SW1:
+
+SW1# clear mac address-table dynamic
+
+• On SW2:
+
+  SW2# clear mac address-table dynamic
+
+Learning Outcomes:
+
+• Generate network traffic to populate MAC address tables
+• Use CLI commands to view and analyze MAC learning
+• Understand ARP and MAC learning behavior
+• Practice clearing and rebuilding MAC tables
