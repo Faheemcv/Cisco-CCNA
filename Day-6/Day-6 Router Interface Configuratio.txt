@@ -1,0 +1,53 @@
+Day-6: Router Interface Configuration and IP Addressing Lab
+
+Objective:
+To configure and verify router interface settings, assign IP addresses, and test end-to-end connectivity between PCs across different networks using Cisco Packet Tracer.
+
+Lab Tasks Overview:
+1. Set R1's Hostname
+Rename the router for identification using the hostname command in global configuration mode.
+
+2. View Router Interfaces (R1)
+Use show ip interface brief or show interfaces to check the IP address, status (up/down), and interface details.
+
+3. Assign IPs and Enable Interfaces on R1
+•Configure IP addresses on:
+
+• G0/0 as 15.0.0.254/8
+
+• G0/1 as 182.98.0.254/16
+
+• G0/2 as 201.191.20.254/24
+
+• Use no shutdown to enable interfaces.
+
+• Add appropriate descriptions using description command.
+
+4. Verify Interface Configuration Again
+Recheck interfaces with show ip interface brief to confirm changes.
+
+5. Save the Configuration
+Use copy running-config startup-config to save your configuration permanently.
+
+6. Configure PC IP Addresses
+Assign IPs and subnet masks:
+
+• PC1: 15.0.0.1 / 255.255.255.0
+
+• PC2: 182.98.0.1 / 255.255.255.0
+
+• PC3: 201.191.20.1 / 255.255.255.0
+
+7. Ping Test for Connectivity
+Ping from PC1 to PC2 and PC3 to ensure successful routing and communication across the networks.
+
+Learning Outcome:
+By completing this lab, you will gain hands-on experience in:
+
+• Router interface configuration
+
+• IP addressing and subnetting
+
+• Enabling and verifying interface status
+
+• Testing network connectivity using ping
