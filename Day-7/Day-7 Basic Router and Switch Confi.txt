@@ -1,0 +1,86 @@
+Day-7: Basic Router and Switch Configuration Lab
+
+Objective:
+This lab focuses on configuring basic settings on a router and two switches, assigning IP addresses to PCs, configuring interface parameters, and improving network security and management by disabling unused ports and applying meaningful descriptions.
+
+Network Details:
+
+• IP Addressing Scheme: 172.16.0.0/16
+
+• Devices:
+
+• Router (R1) – Cisco 2911
+
+• Switches (SW1 & SW2) – Cisco 2960-24TT
+
+• PCs (PC1 to PC4) – PC-PT
+
+Device	Interface	IP Address
+R1	G0/0	        172.16.255.254
+PC1	NIC	        172.16.0.1
+PC2	NIC	        172.16.0.2
+PC3	NIC	        172.16.0.3
+PC4	NIC	        172.16.0.4
+
+Physical Connections:
+
+• R1 G0/0 to SW1 G0/1
+
+• SW1 F0/1 to PC1
+
+• SW1 F0/2 to PC2
+
+• SW1 G0/2 to SW2 G0/1
+
+• SW2 F0/1 to PC3
+
+• SW2 F0/2 to PC4
+
+Tasks to be Performed:
+
+1. Configure Hostnames
+Set the hostnames of the router and switches:
+
+• Router → R1
+
+• Switch 1 → SW1
+
+• Switch 2 → SW2
+
+2. Assign IP Addresses
+Assign IP addresses as per the topology to:
+
+• R1 (G0/0), and
+
+• PCs (PC1–PC4)
+
+3. Configure Interface Speed and Duplex (Manual)
+For all switch-to-switch and switch-to-router interfaces (not PC connections), manually set:
+
+• Speed to 1000 (or 100 if gigabit is not supported)
+
+• Duplex to full
+
+4. Interface Descriptions
+On each switch and router interface, configure descriptions for easier identification.
+Example:
+
+interface G0/1  
+  description Connection to SW1
+  
+5. Disable Unused Interfaces
+On both switches and the router, shut down interfaces that are not connected to any device using:
+
+interface [id]  
+  shutdown
+
+Purpose of the Lab:
+This lab helps reinforce foundational configuration skills for Cisco networking devices including:
+
+• IP addressing
+
+• Physical interface management
+
+• Switch and router security hygiene
+
+• Interface-level documentation and management
