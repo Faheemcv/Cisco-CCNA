@@ -1,0 +1,17 @@
+Day-8: An IPv4 header in a computer network packet. It breaks down the header into fields with their positions in bits and octets (bytes). Each part of the header carries specific information used for routing and delivering data.
+
+Here’s a simple explanation of the main fields:
+
+• Version: IP version (4 for IPv4)
+• IHL (Internet Header Length): Length of the header
+• DSCP/ECN: Used for Quality of Service (QoS)
+• Total Length: Total size of the packet
+• Identification, Flags, Fragment Offset: Used for packet fragmentation
+• TTL (Time To Live): Limits packet lifetime to avoid infinite loops
+• Protocol: Indicates the upper-layer protocol (e.g., TCP, UDP)
+• Header Checksum: Error-checking the header
+• Source IP Address: IP address of the sender
+• Destination IP Address: IP address of the receiver
+• Options (optional): Extra features if the header length is more than 5 (IHL > 5)
+
+This format ensures that routers and devices can properly interpret and forward IPv4 packets.
