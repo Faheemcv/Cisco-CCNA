@@ -1,0 +1,93 @@
+Day-9 Lab: Static Routing Configuration Lab
+
+In this network topology, you are tasked with enabling communication between two PCs (PC1 and PC2) across three routers using static routing.
+
+• There are three networks:
+
+• 192.168.1.0/24 (PC1 and SW1)
+• 192.168.3.0/24 (PC2 and SW2)
+• 192.168.12.0/24 and 192.168.13.0/24 are used as inter-router links.
+
+• Devices include:
+
+• PC1 with IP 192.168.1.1, gateway 192.168.1.254
+• PC2 with IP 192.168.3.1, gateway 192.168.3.254
+• R1, R2, and R3 with IPs assigned as shown on the diagram
+
+ Step-by-Step Configuration
+ PC Configuration (example for PC1 and PC2)
+ PC1:
+  IP Address: 192.168.1.1
+  Subnet Mask: 255.255.255.0
+  Default Gateway: 192.168.1.254
+
+ PC2:
+
+  IP Address: 192.168.3.1
+  Subnet Mask: 255.255.255.0
+  Default Gateway: 192.168.3.254
+ Router Interface IP Configuration
+ R1
+  enable
+  conf t
+  hostname R1
+  interface g0/1
+  ip address 192.168.1.254 255.255.255.0
+  no shutdown
+  exit
+  interface g0/0
+  ip address 192.168.12.1 255.255.255.0
+  no shutdown
+  exit
+
+R2
+  enable
+  conf t
+  hostname R2
+  interface g0/0
+  ip address 192.168.12.2 255.255.255.0
+  no shutdown
+  exit
+  interface g0/1
+  ip address 192.168.13.1 255.255.255.0
+  no shutdown
+  exit
+
+R3
+  enable
+  conf t
+  hostname R3
+  interface g0/0
+  ip address 192.168.13.2 255.255.255.0
+  no shutdown
+  exit
+  interface g0/1
+  ip address 192.168.3.254 255.255.255.0
+  no shutdown
+  exit
+
+Static Routing Configuration
+Add static routes to each router to ensure they know how to reach all networks.
+
+R1:
+  ip route 192.168.3.0 255.255.255.0 192.168.12.2
+
+R2:
+  ip route 192.168.1.0 255.255.255.0 192.168.12.1
+  ip route 192.168.3.0 255.255.255.0 192.168.13.2
+
+R3:
+  ip route 192.168.1.0 255.255.255.0 192.168.13.1
+Testing
+After configuring everything:
+
+• Ping from PC1 to PC2 (ping 192.168.3.1)
+• You should receive replies if routing is correctly set up.
+
+ Summary:
+This lab demonstrates:
+
+• Basic IP addressing on PCs and routers.
+• Configuring default gateways on PCs.
+• Setting up static routes between routers.
+•Testing end-to-end connectivity using ping.
