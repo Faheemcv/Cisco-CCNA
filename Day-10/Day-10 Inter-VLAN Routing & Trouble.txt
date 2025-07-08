@@ -1,0 +1,23 @@
+Day-10: Inter-VLAN Routing & Troubleshooting Lab
+
+Objective:
+Troubleshoot and resolve misconfigurations in a multi-router network to establish connectivity between two PCs (PC1 and PC2) across three different subnets.
+
+Network Overview:
+• PC1 (192.168.1.1/24) is connected via Switch SW1 to Router R1 on G0/1 (192.168.1.254).
+• PC2 (192.168.3.1/24) is connected via Switch SW2 to Router R2 on G0/1 (192.168.3.254).
+• R1 G0/0 (192.168.12.1) is connected to R2 G0/0 (192.168.12.2).
+• R2 G0/1 connects to SW2 and R2 G0/0 connects to R1.
+
+Issue:
+• PC1 and PC2 are unable to ping each other.
+• There is one misconfiguration on each router (R1 and R2) preventing end-to-end   communication.
+
+Tasks:
+1. Analyze interface IP configurations and verify subnet match and correctness.
+2. Check for routing or IP addressing errors.
+3. Apply corrections on both R1 and R2.
+4. Ensure successful ping between PC1 and PC2.
+
+Success Criteria:
+• Both PCs must be able to successfully ping each other after fixing router misconfigurations.
