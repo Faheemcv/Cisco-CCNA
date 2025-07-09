@@ -1,0 +1,49 @@
+Day-11: MAC Address Learning and Packet Flow Lab – Packet Tracer Simulation
+
+Objective:
+Understand how MAC addresses are used and propagated through each segment of a network when a device sends a ping to another across multiple switches and routers.
+
+Task Overview:
+You are given a three-network segment topology (192.168.1.0/24, 192.168.2.0/24, and 192.168.3.0/24) interconnected through routers (R1, R2, and R3) and switches (SW1 and SW2), with end devices (PC1 to PC6) in different subnets.
+
+Three Main Tasks:
+1. PC1 pings PC4
+Identify the Source and Destination MAC addresses at each hop during the ping from PC1 (192.168.1.1) to PC4 (192.168.3.1).
+You need to find out the MAC addresses at these points:
+
+A. PC1 → SW1
+
+B. SW1 → R1
+
+C. R1 → R2
+
+D. R2 → R3
+
+E. R3 → SW2
+
+F. SW2 → PC4
+
+Note: You should specify the MAC by the device and interface (e.g., R1 G0/0 MAC).
+
+2. PC1 pings PC3
+Find the MAC addresses at each point when PC1 sends a ping to PC3 (192.168.1.3) — a device within the same network, passing only through SW1.
+
+A. PC1 → SW1
+
+B. SW1 → PC3
+
+3. PC4 pings PC1
+Reverse the direction and identify the MAC addresses at each hop during a ping from PC4 to PC1.
+This will follow the reverse path of Task 1 and should include similar segments.
+
+Instructions:
+• Use CLI and Simulation Mode in Cisco Packet Tracer to view each packet's journey.
+• Complete an initial ping in Realtime mode to populate the ARP tables and enable MAC address learning.
+• Switch to Simulation mode and filter ICMP packets to analyze each step clearly.
+
+This activity helps reinforce concepts such as:
+
+• MAC address learning
+• ARP (Address Resolution Protocol)
+• Layer 2 vs Layer 3 communication
+• How MAC addresses change at each hop across a routed network
