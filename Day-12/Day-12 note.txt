@@ -1,0 +1,45 @@
+Day-12
+IPv4 Address Classes & Subnetting
+
+IPv4 addresses are 32-bit numbers divided into 5 classes (A to E) based on their starting bits and range.
+
+Class	Starting Bits	Range (First Octet)	Default Subnet Mask	Usage
+A	0	        1 – 126	                255.0.0.0	        Large networks
+B	10	        128 – 191	        255.255.0.0	        Medium networks
+C	110	        192 – 223  	        255.255.255.0	        Small networks
+D	1110	        224 – 239	        -	                Multicast
+E	1111	        240 – 255	        -	                Reserved for research
+
+Note: 127.x.x.x is reserved for loopback testing.
+
+Subnetting
+Subnetting is the process of dividing a large network into smaller, more manageable sub-networks (subnets).
+
+Purpose of Subnetting:
+
+• Improve network performance
+• Increase security
+• Efficient IP address usage
+
+Key Terms:
+
+• Subnet Mask: Used to separate the network and host parts of an IP address.
+
+• CIDR Notation: e.g., /24 (means 24 bits for the network).
+
+• Network Address: The first address in the subnet (used to identify the subnet).
+
+• Broadcast Address: The last address in the subnet (used to send data to all hosts).
+
+Example:
+
+• IP: 192.168.1.10
+
+• Subnet mask: 255.255.255.0 or /24
+
+• Network Address: 192.168.1.0
+
+• Broadcast Address: 192.168.1.255
+
+• Usable Hosts: 254 (from .1 to .254)
+
