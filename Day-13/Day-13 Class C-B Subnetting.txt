@@ -1,0 +1,38 @@
+Day-13 Class C-B Subnetting 
+Overview:
+
+• IP Range: 128.0.0.0 to 191.255.255.255
+• Default Subnet Mask: 255.255.0.0 → /16
+• Purpose: Class B addresses support medium-sized networks by default, with around 65,534 hosts per network.
+
+Why Subnet Class B?
+Even though Class B supports many hosts, sometimes you don’t need all of them in one network. Subnetting allows you to divide one large network into multiple smaller networks (subnets), improving management and security.
+
+Example:
+Let’s say you use a /24 subnet mask (255.255.255.0) instead of the default /16:
+
+• New subnet mask: 255.255.255.0
+• Borrowed bits: 8 bits from the host part
+• Number of subnets: 2⁸ = 256 subnets
+• Hosts per subnet: 2⁸ - 2 = 254 hosts
+
+Class C Subnetting – Explained
+Overview:
+• IP Range: 192.0.0.0 to 223.255.255.255
+• Default Subnet Mask: 255.255.255.0 → /24
+• Purpose: Class C addresses are designed for small networks, supporting 254 hosts per network.
+
+Why Subnet Class C?
+If you want to divide a small network into even smaller segments, like for departments or security reasons, you can subnet Class C further.
+
+Example:
+Use a /26 subnet mask (255.255.255.192):
+
+• Borrowed bits: 2 bits from the host part
+• Number of subnets: 2² = 4 subnets
+• Hosts per subnet: 2⁶ - 2 = 62 hosts
+
+Summary Table
+Class	Default Subnet Mask	Hosts (Default)	Subnet Example	Hosts/Subnet
+B	255.255.0.0 (/16)	65,534	        /24	        254
+C	255.255.255.0 (/24)	254	        /26	        62
