@@ -1,0 +1,34 @@
+Day-15: VLSM Subnetting & Static Routing Lab
+
+Objective:
+Use VLSM (Variable Length Subnet Masking) to divide the 192.168.5.0/24 network into multiple subnets based on the number of hosts in each LAN. Also, establish a point-to-point connection between two routers and configure static routes so all PCs can communicate.
+
+Network Requirements:
+
+LAN	No. of Hosts	Devices Involved	Subnet Type
+LAN1	45 hosts	PC1, SW1	        Medium Subnet
+LAN2	64 hosts	PC2, SW2	        Largest Subnet
+LAN3	14 hosts	PC3, SW3	        Small Subnet
+LAN4	9 hosts	        PC4, SW4	        Smallest Subnet
+P2PLink	2 hosts	        Between R1 & R2	        Point-to-Point (/30)
+
+Instructions:
+
+1. Subnet the 192.168.5.0/24 address space using VLSM to meet the host requirements of all 4 LANs and 1 point-to-point link.
+
+2. For each LAN:
+• Assign the first usable IP address to the PC.
+• Assign the last usable IP address to the router interface connected to that LAN.
+
+3. For the point-to-point link, use a subnet that supports only 2 hosts (like /30).
+
+4. Configure static routes on both routers (R1 and R2) so that:
+• All PCs across LAN1 to LAN4 can ping each other.
+• The routers can forward packets properly between networks.
+
+Learning Outcomes:
+
+• Understand how to apply VLSM in real-world topologies.
+• Practice IP addressing with efficiency.
+• Apply static routing to enable end-to-end connectivity.
+• Reinforce subnet mask calculation and host address assignment.
