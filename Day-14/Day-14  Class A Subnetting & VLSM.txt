@@ -1,0 +1,15 @@
+Day-14 : Class A Subnetting & VLSM (Variable Length Subnet Mask)
+Class A Subnetting 
+
+• IP Range: 1.0.0.0 to 126.0.0.0
+• Default Subnet Mask: 255.0.0.0 (/8)
+• Supports: Very large networks (over 16 million hosts)
+• Subnetting Use: Divides the huge number of hosts into smaller subnets for better management.
+• Example: Using /16 creates 256 subnets, each with 65,534 hosts.
+
+VLSM (Variable Length Subnet Mask)
+
+• VLSM allows using different subnet sizes within the same network.
+• It helps optimize IP address usage by assigning subnet masks based on exact host needs.
+• Example: A subnet with 2 hosts gets /30, while another with 50 hosts gets /26.
+• Used in: Real-world routing and efficient IP planning.
