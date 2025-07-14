@@ -1,0 +1,86 @@
+Day-16: VLAN Configuration & Inter-VLAN Routing Lab
+
+Objective:
+
+This lab is designed to teach VLAN configuration, IP addressing, and inter-VLAN routing using a router-on-a-stick setup in Cisco Packet Tracer. The network is divided into three 
+VLANs:
+
+• VLAN10: Engineering (Subnet: 10.0.0.0/26)
+• VLAN20: HR (Subnet: 10.0.0.64/26)
+• VLAN30: Sales (Subnet: 10.0.0.128/26)
+
+Each VLAN includes 2 PCs connected to a switch (SW1), which is in turn connected to a single router (R1).
+
+Instructions Summary:
+1. IP Address Configuration:
+
+Assign correct IP addresses and subnet masks to each PC based on the VLAN they belong to.
+
+Set the default gateway of each PC to the last usable IP address of its respective subnet:
+
+VLAN10: Gateway = 10.0.0.62
+
+VLAN20: Gateway = 10.0.0.126
+
+VLAN30: Gateway = 10.0.0.190
+
+Router Setup (Router-on-a-Stick):
+
+Use one physical interface on the router (e.g., G0/1) and configure sub-interfaces for each VLAN.
+
+Assign the respective gateway IP to each sub-interface.
+
+
+interface G0/1.10
+  encapsulation dot1Q 10
+  ip address 10.0.0.62 255.255.255.192
+
+interface G0/1.20
+  encapsulation dot1Q 20
+  ip address 10.0.0.126 255.255.255.192
+
+interface G0/1.30
+  encapsulation dot1Q 30
+  ip address 10.0.0.190 255.255.255.192
+Switch Configuration:
+
+Create and name the VLANs:
+
+vlan 10
+  name Engineering
+vlan 20
+  name HR
+vlan 30
+  name Sales
+Assign each switch port to its corresponding VLAN:
+
+interface F3/1
+  switchport mode access
+  switchport access vlan 10
+...
+Configure the router-facing port as a trunk:
+
+interface G1/1
+  switchport trunk encapsulation dot1q
+  switchport mode trunk
+Testing Connectivity:
+
+Use simulation mode in Packet Tracer.
+
+Test ping between PCs in the same VLAN to ensure intra-VLAN communication.
+
+Use broadcast ping (ping subnet broadcast address) to observe which PCs respond within the same VLAN.
+
+Verify inter-VLAN routing by pinging PCs across different VLANs.
+
+Purpose & Learning Outcome:
+This lab demonstrates:
+
+How to segment a network using VLANs.
+
+How to configure a router to enable communication between VLANs.
+
+Practical use of trunk links and sub-interfaces.
+
+Use of Packet Tracer simulation to observe broadcast behavior and debug connectivity.
+
