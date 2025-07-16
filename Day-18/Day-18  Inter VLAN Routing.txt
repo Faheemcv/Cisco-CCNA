@@ -1,0 +1,107 @@
+
+Day-18: Inter-VLAN Routing with Multilayer Switch
+Objective:
+The goal of this lab is to configure inter-VLAN routing using a Layer 3 switch (Multilayer Switch SW2) and enable internet access for all VLANs.
+
+Network Overview:
+VLAN10:
+
+• Subnet: 10.0.0.0/26
+
+• Hosts:
+
+  • PC1: 10.0.0.1
+
+  • PC2: 10.0.0.2
+
+  • PC6: 10.0.0.3
+
+  • PC7: 10.0.0.4
+
+• VLAN20:
+
+  • Subnet: 10.0.0.64/26
+
+  • Host:
+
+   • PC5: 10.0.0.65
+
+• VLAN30:
+
+  • Subnet: 10.0.0.128/26
+
+  • Hosts:
+
+   • PC3: 10.0.0.129
+
+   • PC4: 10.0.0.130
+
+• SW1 and SW2: Connected via trunk
+
+• SW2 and R1: Connected using Layer 3 (Point-to-Point) link:
+
+• SW2 (Gi0/1): 10.0.0.193/30
+
+• R1 (Gi0/1): 10.0.0.194/30
+
+• R1 to Internet Router:
+
+• R1 Gi0/0: 10.0.0.192/30
+
+• Internet Router: 10.0.0.1 (default gateway)
+
+Instructions Summary:
+1. Remove ROAS (Router on a Stick):
+
+Instead of subinterfaces on R1, use a Layer 3 link from SW2 to R1.
+
+On SW2, configure the Layer 3 interface (no switchport, assign IP 10.0.0.193/30).
+
+Set default route on SW2:
+ip route 0.0.0.0 0.0.0.0 10.0.0.194
+
+2. Configure SVIs (Switched Virtual Interfaces) on SW2:
+
+VLAN10 SVI: 10.0.0.62/26
+
+VLAN20 SVI: 10.0.0.126/26
+
+VLAN30 SVI: 10.0.0.190/26
+
+3. Test Inter-VLAN Communication:
+
+Ping between hosts in different VLANs (e.g., PC1 to PC4)
+
+4. Test Internet Connectivity:
+
+Ping 1.1.1.1 from any host to verify routing through R1 and the Internet Router.
+
+Key Commands Summary (on SW2):
+
+# Configure Layer 3 interface
+interface Gig0/1
+ no switchport
+ ip address 10.0.0.193 255.255.255.252
+ no shutdown
+
+# Create SVIs
+interface vlan 10
+ ip address 10.0.0.62 255.255.255.192
+ no shutdown
+
+interface vlan 20
+ ip address 10.0.0.126 255.255.255.192
+ no shutdown
+
+interface vlan 30
+ ip address 10.0.0.190 255.255.255.192
+ no shutdown
+
+# Set default route
+ip route 0.0.0.0 0.0.0.0 10.0.0.194
+
+Validation:
+• All PCs should be able to ping each other (inter-VLAN routing works).
+
+• All PCs should be able to ping 1.1.1.1 (Internet access works).
+
