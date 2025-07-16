@@ -1,0 +1,62 @@
+Day-17: VLAN Configuration with Router-on-a-Stick Setup
+This Packet Tracer network topology demonstrates VLAN segmentation, trunking, and inter-VLAN routing using router-on-a-stick configuration. The scenario includes two switches (SW1 and SW2), a router (R1), and multiple PCs grouped under three VLANs:
+
+Network Components and Addressing:
+VLAN 10 (Yellow)
+
+• Subnet: 10.0.0.0/26
+
+• PCs:
+
+• PC1: 10.0.0.1
+• PC2: 10.0.0.2
+• PC6: 10.0.0.3
+• PC7: 10.0.0.4
+
+• VLAN 20 (Blue)
+
+• Subnet: 10.0.0.64/26
+• PC5: 10.0.0.65
+
+• VLAN 30 (Purple)
+
+• Subnet: 10.0.0.128/26
+
+• Cs:
+
+• PC3: 10.0.0.129
+• PC4: 10.0.0.130
+
+Configuration Tasks:
+1. Switch Access Port Configuration:
+   Assign the respective switch ports (F0/x) to the correct VLAN for each PC using      switchport access vlan <VLAN_ID>.
+
+2. Trunk Link Between SW1 and SW2:
+
+• Configure G0/1 on SW1 and G0/1 on SW2 as trunk ports using switchport mode trunk.
+
+• Allow only VLANs 10, 20, and 30 using switchport trunk allowed vlan 10,20,30.
+
+• Assign an unused VLAN (e.g., VLAN 99) as the native VLAN to prevent VLAN hopping.
+
+3. Router-on-a-Stick Setup:
+
+• Use subinterfaces on R1’s G0/0 for inter-VLAN routing:
+
+• G0/0.10 → VLAN 10 → IP: 10.0.0.62
+• G0/0.20 → VLAN 20 → IP: 10.0.0.126
+• G0/0.30 → VLAN 30 → IP: 10.0.0.190
+• Assign encapsulation using encapsulation dot1Q <VLAN_ID>.
+
+4.Connectivity Testing:
+
+• Use the ping command from each PC to verify full connectivity across VLANs.
+• Ensure that all PCs can reach each other, confirming successful inter-VLAN routing.
+
+Final Outcome:
+If configured correctly:
+
+• All VLANs will be isolated at Layer 2.
+• Inter-VLAN routing will occur via R1.
+• All PCs from different VLANs will be able to communicate using the router-on-a-stick   approach.
+
