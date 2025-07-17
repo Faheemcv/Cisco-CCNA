@@ -1,0 +1,40 @@
+VLAN and VTP (VLAN Trunking Protocol) configuration scenario. The network is composed of three switches (SW1, SW2, SW3) connected through Gigabit Ethernet trunk links and multiple PCs assigned to different VLANs:
+
+Network Layout:
+
+VLAN10 (Green):
+IP Subnet: 10.0.0.0/26
+Devices: PC1 (10.0.0.1) and another PC on the same subnet.
+
+VLAN20 (Yellow):
+IP Subnet: 10.0.0.64/26
+Devices: PC8 (10.0.0.65) and PC9 (10.0.0.66).
+
+VLAN30 (Orange):
+IP Subnet: 10.0.0.128/26
+Devices: PC6 (10.0.0.129) and PC7 (10.0.0.130).
+
+VLAN40 (Purple):
+IP Subnet: 10.0.0.192/26
+Devices: PC4 (10.0.0.193) and PC5 (10.0.0.194).
+
+Switch Roles:
+SW1: VTP Server Mode
+Responsible for creating and propagating VLANs 10, 20, and 30.
+
+SW2: VTP Transparent Mode
+VLAN40 is locally configured on SW2 and not propagated through VTP.
+
+SW3: VTP Client Mode
+Receives VLAN database from SW1. VLAN50 is tested on SW3 for propagation.
+
+Trunk Links:
+Switch interconnections use Gigabit Ethernet ports (G0/1, G0/2) configured as trunks.
+DTP (Dynamic Trunking Protocol) is disabled as per requirements.
+
+Tasks to Perform:
+Configure trunk ports between switches, disable DTP.
+Set VTP domain "CCNA" on SW1, create VLANs 10, 20, and 30, verify propagation to SW2 and SW3.
+Configure SW2 in transparent mode, add VLAN40, and check its presence in SW1 and SW3.
+Configure SW3 in client mode, try adding VLAN50, and verify if it's allowed.
+Assign PCs to correct VLANs and check if DTP is disabled on access ports.
