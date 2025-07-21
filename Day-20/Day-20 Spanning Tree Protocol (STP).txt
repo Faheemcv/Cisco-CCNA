@@ -1,0 +1,15 @@
+Day-20: Spanning Tree Protocol (STP) Root Bridge and Port Roles Identification
+
+The given topology is a Spanning Tree Protocol (STP) lab setup in Cisco Packet Tracer. It consists of four interconnected switches (SW1, SW2, SW3, SW4) forming a looped network. The objective of the question is to determine the root bridge and identify the roles of each switch port (Root, Designated, or Non-Designated) based on STP election rules.
+
+Root Bridge Selection: The switch with the lowest Bridge ID (Priority + MAC address) is elected as the root bridge.
+
+Port Roles: For each switch, ports are categorized as:
+
+Root Port (RP): The port with the best path to the root bridge.
+
+Designated Port (DP): The port forwarding frames towards the network segment.
+
+Non-Designated Port (NDP): The port placed in a blocking state to prevent loops.
+
+The diagram also includes instructions to disable link lights in Packet Tracer and verify results via CLI commands.
