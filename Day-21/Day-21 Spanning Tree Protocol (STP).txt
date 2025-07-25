@@ -1,0 +1,45 @@
+Day-21: Spanning Tree Protocol (STP) Lab – VLAN Root Bridge and Port Roles
+
+Lab Objective:
+This lab is designed to help students understand and analyze the Spanning Tree Protocol (STP) roles, root bridge election, and port states across VLANs. The lab involves configuring root bridges, manipulating STP costs and priorities, and securing edge ports using PortFast and BPDU Guard.
+
+Network Overview:
+The topology consists of four switches (SW1–SW4) interconnected in a loop, forming a redundant Layer 2 network. Two VLANs are in use:
+
+VLAN1 (Green) – Connected to PC1 (172.16.0.0/25)
+
+VLAN2 (Yellow) – Connected to PC2 (172.16.0.128/25)
+
+Lab Tasks:
+
+Check Current STP Topology:
+Use CLI commands like show spanning-tree to determine the current root bridge and STP port roles (Root Port, Designated Port, Blocking) on each switch.
+
+Configure Root Bridges:
+
+Make SW1 the primary root bridge for VLAN1 and secondary for VLAN2.
+
+Make SW2 the primary root bridge for VLAN2 and secondary for VLAN1.
+Observe changes in port roles and STP states.
+
+Modify Port Cost on SW4:
+Increase the STP cost of interface Fa0/2 to 100.
+Analyze whether this change influences root port selection.
+
+Change Port Priority on SW1:
+Increase the priority of interface Fa0/1 to 240.
+Check if this affects root port selection on SW3.
+
+Secure Edge Ports:
+Enable PortFast and BPDU Guard on access interfaces Fa0/3 of SW3 and SW4 to prevent STP recalculations from end-user devices.
+
+Purpose:
+This lab helps in understanding:
+
+How STP prevents loops
+
+Root bridge election in multiple VLANs
+
+Effect of STP cost and priority changes
+
+Best practices for securing edge ports using BPDU Guard and PortFast
