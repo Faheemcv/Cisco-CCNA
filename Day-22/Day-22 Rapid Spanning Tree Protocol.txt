@@ -1,0 +1,97 @@
+Day-22: Rapid Spanning Tree Protocol (RSTP) Lab – Port Roles and Link Types
+
+
+Lab Description:
+This lab scenario demonstrates the behavior and configuration of Rapid Spanning Tree Protocol (RSTP) across four switches (SW1, SW2, SW3, and SW4) and several PCs. It is used to prevent Layer 2 switching loops by electing a root bridge and dynamically blocking redundant paths while maintaining backup links.
+
+Network Topology Overview:
+Four switches: SW1, SW2, SW3, SW4
+
+Each switch is connected with FastEthernet or GigabitEthernet links forming a redundant mesh topology.
+
+PCs (PC1–PC6) are connected to various switches for end-host communication.
+
+STP priority and MAC addresses determine the root bridge.
+
+Thick dashed lines indicate blocked ports.
+
+Lab Objectives:
+Identify the Root Bridge:
+
+Based on the Bridge Priority and MAC Address, the root bridge is the switch with the lowest Bridge ID (Priority + MAC).
+
+From the diagram:
+
+All switches have the same priority 32769.
+
+Compare MAC addresses:
+
+SW1: 0005.5E4E.714B ✅ (Lowest MAC address)
+
+Hence, SW1 is the Root Bridge.
+
+Determine Port Roles/States:
+
+Use the CLI commands (show spanning-tree) to identify:
+
+Root Ports (RP): Closest path to root bridge.
+
+Designated Ports (DP): Best path on a network segment.
+
+Alternate/Discarding Ports: Backup path; not in use.
+
+On the Root Bridge (SW1), all active interfaces are Designated Ports.
+
+Port Role Expectations:
+
+SW2:
+
+G0/1 → RP (toward SW1)
+
+F0/2 → Alternate (discarding)
+
+SW3:
+
+G0/1 → RP (toward SW1)
+
+F0/2 → Alternate (discarding)
+
+SW4:
+
+F0/1 → RP (toward SW1)
+
+F0/2 → DP
+
+Blocked links (shown in thick dashed lines) indicate Alternate/Discarding state.
+
+Manually Configure RSTP Link Types:
+
+Use RSTP edge/non-edge port types:
+
+Edge ports: Directly connected to end devices (e.g., PCs)
+
+Point-to-point: Between switches
+
+Configure with:
+
+spanning-tree portfast
+spanning-tree link-type point-to-point
+For SW1’s F0/24, since it connects to SW3 (another switch), it should be:
+
+Link Type: Point-to-Point
+
+Key CLI Commands:
+
+show spanning-tree
+show spanning-tree interface fa0/24
+configure terminal
+interface fa0/24
+spanning-tree link-type point-to-point
+Conclusion:
+This lab provides practical insights into how RSTP works by:
+
+Electing a root bridge based on priority and MAC
+
+Assigning port roles (Root, Designated, Alternate)
+
+Recognizing link types for accurate convergence
