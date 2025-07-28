@@ -1,0 +1,646 @@
+*End host and SVI IP addresses are pre-configured*
+
+1. Configure Layer 2 EtherChannel between ASW1 and DSW1 using LACP.
+    Configure it as a trunk.
+
+2. Configure Layer 2 EtherChannel between ASW2 and DSW2 using PAgP.
+    Configure it as a trunk.
+
+3. Configure Layer 3 EtherChannel between DSW1 and DSW2 using static EtherChannel.
+
+4. Configure routes to allow the PCs to reach SRV1.
+
+5. What is the default EtherChannel load-balancing method used on each switch?
+
+6. Configure the switches to load-balance based on source and destination IP addresses.
+
+
+__________________________________________________________________________________________________________________________________________******************************************************************************************************************************************
+_________________________________________________________________________________________________________________________________________
+*****************************************************************************************************************************************
+
+
+sw1
+
+interface FastEthernet0/6
+!
+interface FastEthernet0/7
+!
+interface FastEthernet0/8
+!
+interface FastEthernet0/9
+!
+interface FastEthernet0/10
+!
+interface FastEthernet0/11
+!
+interface FastEthernet0/12
+!
+interface FastEthernet0/13
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+!
+interface FastEthernet0/20
+!
+interface FastEthernet0/21
+!
+interface FastEthernet0/22
+!
+interface FastEthernet0/23
+!
+interface FastEthernet0/24
+!
+interface GigabitEthernet0/1
+ switchport mode trunk
+ channel-group 1 mode active
+!
+interface GigabitEthernet0/2
+ switchport mode trunk
+ channel-group 1 mode active
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+!
+!
+!
+line con 0
+!
+line vty 0 4
+ login
+line vty 5 15
+ login
+!
+!
+!
+!
+end
+
+
+ASW1(config-if)#do sh eth
+ASW1(config-if)#do sh eth summ
+ASW1(config-if)#do sh eth summ
+Flags:  D - down        P - in port-channel
+        I - stand-alone s - suspended
+        H - Hot-standby (LACP only)
+        R - Layer3      S - Layer2
+        U - in use      f - failed to allocate aggregator
+        u - unsuitable for bundling
+        w - waiting to be aggregated
+        d - default port
+
+
+Number of channel-groups in use: 1
+Number of aggregators:           1
+
+Group  Port-channel  Protocol    Ports
+------+-------------+-----------+----------------------------------------------
+
+1      Po1(SD)           LACP   Gig0/1(I) Gig0/2(I) 
+ASW1(config-if)#
+ASW1(config-if)#
+ASW1(config-if)#
+%LINK-5-CHANGED: Interface Port-channel1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Port-channel1, changed state to up
+
+
+
+ASW1>en
+ASW1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+ASW1(config)#
+ASW1(config)#
+ASW1(config)#do sh span
+ASW1(config)#do sh spanning-tree
+ASW1(config)#do sh spanning-tree
+VLAN0001
+  Spanning tree enabled protocol ieee
+  Root ID    Priority    20481
+             Address     0007.EC07.1D30
+             Cost        7
+             Port        27(Port-channel1)
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+             Address     0005.5E1E.5B9D
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  20
+
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- --------------------------------
+Po1              Root FWD 3         128.27   Shr
+Fa0/2            Desg FWD 19        128.2    P2p
+Fa0/1            Desg FWD 19        128.1    P2p
+
+ASW1(config)#
+
+
+
+ASW1>
+ASW1>
+ASW1>en
+ASW1# conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+ASW1(config)#do sh eth 
+ASW1(config)#do sh ether
+ASW1(config)#do sh ether loa
+ASW1(config)#do sh ether load-
+ASW1(config)#do sh ether load-ba
+ASW1(config)#do sh ether load-balance
+ASW1(config)#do sh ether load-balance
+EtherChannel Load-Balancing Operational State (src-mac):
+Non-IP: Source MAC address
+  IPv4: Source MAC address
+  IPv6: Source MAC address
+
+ASW1(config)#port-channel load-bal
+ASW1(config)#port-channel load-balance src-dst-ip
+ASW1(config)#do sh ether load-balance
+EtherChannel Load-Balancing Operational State (src-dst-ip):
+Non-IP: Source XOR Destination MAC address
+  IPv4: Source XOR Destination IP address
+  IPv6: Source XOR Destination IP address
+
+ASW1(config)#
+
+__________________________________________________________________________________________________________________________________________
+
+sw2
+
+ASW2>en
+ASW2#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+ASW2(config)#int range g0/1 - 2
+ASW2(config-if-range)#ch
+ASW2(config-if-range)#chann
+ASW2(config-if-range)#channel
+ASW2(config-if-range)#channel-
+ASW2(config-if-range)#channel-gr
+ASW2(config-if-range)#channel-group  1 mode ?
+  active     Enable LACP unconditionally
+  auto       Enable PAgP only if a PAgP device is detected
+  desirable  Enable PAgP unconditionally
+  on         Enable Etherchannel only
+  passive    Enable LACP only if a LACP device is detected
+ASW2(config-if-range)#channel-group  1 mode de
+ASW2(config-if-range)#channel-group  1 mode desirable 
+ASW2(config-if-range)#
+Creating a port-channel interface Port-channel 1
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/2, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/2, changed state to up
+
+ASW2(config-if-range)#
+ASW2(config-if-range)#
+ASW2(config-if-range)#int pol
+                       ^
+% Invalid input detected at '^' marker.
+	
+ASW2(config-if-range)#int po1
+ASW2(config-if)#sw
+ASW2(config-if)#switchport mo
+ASW2(config-if)#switchport mode tr
+ASW2(config-if)#switchport mode trunk 
+ASW2(config-if)#
+%LINK-5-CHANGED: Interface Port-channel1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Port-channel1, changed state to up
+
+
+
+
+ASW2>
+ASW2>
+ASW2>
+ASW2>
+ASW2>
+ASW2>en
+ASW2#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+ASW2(config)#port-channel load-balance src-det-ip
+                                            ^
+% Invalid input detected at '^' marker.
+	
+ASW2(config)#port-channel load-balance src-dst-ip
+ASW2(config)#do sh eth load
+EtherChannel Load-Balancing Operational State (src-dst-ip):
+Non-IP: Source XOR Destination MAC address
+  IPv4: Source XOR Destination IP address
+  IPv6: Source XOR Destination IP address
+
+ASW2(config)#
+
+__________________________________________________________________________________________________________________________________________
+
+sw3
+
+DSW2>
+DSW2>en
+DSW2#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+DSW2(config)#int
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/3, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/3, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/4, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/4, changed state to up
+
+% Incomplete command.
+DSW2(config)#int ra
+DSW2(config)#int range g1/0/3 - 4
+DSW2(config-if-range)#cha
+DSW2(config-if-range)#channel-g
+DSW2(config-if-range)#channel-group 1 mo
+DSW2(config-if-range)#channel-group 1 mode de
+DSW2(config-if-range)#channel-group 1 mode desirable 
+DSW2(config-if-range)#
+Creating a port-channel interface Port-channel 1
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/3, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/3, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/4, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/4, changed state to up
+
+%LINK-5-CHANGED: Interface Port-channel1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Port-channel1, changed state to up
+
+DSW2(config-if-range)#
+DSW2(config-if-range)#
+DSW2(config-if-range)#int po1
+DSW2(config-if)#sw
+DSW2(config-if)#switchport tr
+DSW2(config-if)#switchport trunk en
+DSW2(config-if)#switchport trunk en dot1q
+                                 ^
+% Invalid input detected at '^' marker.
+	
+DSW2(config-if)#sw
+DSW2(config-if)#switchport mo
+DSW2(config-if)#switchport mode tr
+DSW2(config-if)#switchport mode trunk 
+DSW2(config-if)#switchport trunk en dot1q
+                                 ^
+% Invalid input detected at '^' marker.
+	
+DSW2(config-if)#do sh eth summ
+Flags:  D - down        P - in port-channel
+        I - stand-alone s - suspended
+        H - Hot-standby (LACP only)
+        R - Layer3      S - Layer2
+        U - in use      f - failed to allocate aggregator
+        u - unsuitable for bundling
+        w - waiting to be aggregated
+        d - default port
+
+
+Number of channel-groups in use: 1
+Number of aggregators:           1
+
+Group  Port-channel  Protocol    Ports
+------+-------------+-----------+----------------------------------------------
+
+1      Po1(SU)           PAgP   Gig1/0/3(P) Gig1/0/4(P) 
+DSW2(config-if)#
+DSW2(config-if)#
+DSW2(config-if)#int ran
+DSW2(config-if)#int range g1/0/1 - 2
+DSW2(config-if-range)#no sw
+DSW2(config-if-range)#no switchport 
+DSW2(config-if-range)#
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/1, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/2, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/2, changed state to up
+
+DSW2(config-if-range)#ch
+DSW2(config-if-range)#channel-group 2 mode on
+DSW2(config-if-range)#
+Creating a port-channel interface Port-channel 2
+
+%LINK-5-CHANGED: Interface Port-channel2, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Port-channel2, changed state to up
+
+DSW2(config-if-range)#int po2
+DSW2(config-if)#ip add 10.0.0.2 255.255.255.252
+DSW2(config-if)#
+
+
+
+
+DSW2>
+DSW2>
+DSW2>
+DSW2>en
+DSW2# conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+DSW2(config)#ip routing
+DSW2(config)#ip route 172.16.1.0 255.255.255.0 10.0.0.1
+DSW2(config)#do sh ip route
+Codes: C - connected, S - static, I - IGRP, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default, U - per-user static route, o - ODR
+       P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+     10.0.0.0/30 is subnetted, 1 subnets
+C       10.0.0.0 is directly connected, Port-channel2
+     172.16.0.0/24 is subnetted, 2 subnets
+S       172.16.1.0 [1/0] via 10.0.0.1
+C       172.16.2.0 is directly connected, Vlan1
+
+DSW2(config)#
+
+
+DSW2>
+DSW2>en
+DSW2# conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+DSW2(config)#port channel load-balance src-dst-ip
+                  ^
+% Invalid input detected at '^' marker.
+	
+DSW2(config)#port-channel load-balance src-dst-ip
+DSW2(config)#do sh eth load
+EtherChannel Load-Balancing Configuration:
+        src-dst-ip
+
+EtherChannel Load-Balancing Addresses Used Per-Protocol:
+Non-IP: Source XOR Destination MAC address
+  IPv4: Source XOR Destination IP address
+  IPv6: Source XOR Destination IP address
+
+DSW2(config)#
+
+__________________________________________________________________________________________________________________________________________
+
+
+sw4
+
+
+DSW1>
+DSW1>
+DSW1>
+DSW1>en 
+DSW1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+DSW1(config)#int ran
+DSW1(config)#int range g1/0/1 - 2
+DSW1(config-if-range)#no sw
+DSW1(config-if-range)#no switchport 
+DSW1(config-if-range)#
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/1, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/2, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/2, changed state to up
+
+DSW1(config-if-range)#channel
+DSW1(config-if-range)#channel-gr
+DSW1(config-if-range)#channel-group 2 mode on
+DSW1(config-if-range)#
+Creating a port-channel interface Port-channel 2
+
+%LINK-5-CHANGED: Interface Port-channel2, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Port-channel2, changed state to up
+
+DSW1(config-if-range)#int po2
+DSW1(config-if)#ip add 10.0.0.1 255.255.255.252
+DSW1(config-if)#do sh eth summ
+Flags:  D - down        P - in port-channel
+        I - stand-alone s - suspended
+        H - Hot-standby (LACP only)
+        R - Layer3      S - Layer2
+        U - in use      f - failed to allocate aggregator
+        u - unsuitable for bundling
+        w - waiting to be aggregated
+        d - default port
+
+
+Number of channel-groups in use: 2
+Number of aggregators:           2
+
+Group  Port-channel  Protocol    Ports
+------+-------------+-----------+----------------------------------------------
+
+1      Po1(SU)           LACP   Gig1/0/3(P) Gig1/0/4(P) 
+2      Po2(RU)           -      Gig1/0/1(P) Gig1/0/2(P) 
+DSW1(config-if)#do sh int trunk
+Port        Mode         Encapsulation  Status        Native vlan
+Po1         on           802.1q         trunking      1
+
+Port        Vlans allowed on trunk
+Po1         1-1005
+
+Port        Vlans allowed and active in management domain
+Po1         1
+
+Port        Vlans in spanning tree forwarding state and not pruned
+Po1         1
+
+DSW1(config-if)#int range g1/0/1 - 2
+DSW1(config-if-range)#sw
+DSW1(config-if-range)#no switchport 
+DSW1(config-if-range)#chann
+DSW1(config-if-range)#channel-group 2 mode on
+DSW1(config-if-range)#int po2
+DSW1(config-if)#ip add 10.0.0.2 255.255.255.252
+DSW1(config-if)#do sh eth sum
+Flags:  D - down        P - in port-channel
+        I - stand-alone s - suspended
+        H - Hot-standby (LACP only)
+        R - Layer3      S - Layer2
+        U - in use      f - failed to allocate aggregator
+        u - unsuitable for bundling
+        w - waiting to be aggregated
+        d - default port
+
+
+Number of channel-groups in use: 2
+Number of aggregators:           2
+
+Group  Port-channel  Protocol    Ports
+------+-------------+-----------+----------------------------------------------
+
+1      Po1(SU)           LACP   Gig1/0/3(P) Gig1/0/4(P) 
+2      Po2(RU)           -      Gig1/0/1(P) Gig1/0/2(P) 
+DSW1(config-if)#do ping 10.0.0.2
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 10.0.0.2, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 0/8/12 ms
+
+DSW1(config-if)#do sh ip route
+Default gateway is not set
+
+Host               Gateway           Last Use    Total Uses  Interface
+ICMP redirect cache is empty
+
+DSW1(config-if)#ex
+DSW1(config)#ip routing
+DSW1(config)#do sh ip route
+Codes: C - connected, S - static, I - IGRP, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default, U - per-user static route, o - ODR
+       P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+     10.0.0.0/30 is subnetted, 1 subnets
+C       10.0.0.0 is directly connected, Port-channel2
+     172.16.0.0/24 is subnetted, 1 subnets
+C       172.16.1.0 is directly connected, Vlan1
+
+DSW1(config)#ip route 172.16.2.0 255.255.255.0 10.0.0.2
+%Invalid next hop address (it's this router)
+DSW1(config)#ip route 172.16.2.0 255.255.255.0 10.0.0.1
+DSW1(config)#do sh ip route
+Codes: C - connected, S - static, I - IGRP, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default, U - per-user static route, o - ODR
+       P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+     10.0.0.0/30 is subnetted, 1 subnets
+C       10.0.0.0 is directly connected, Port-channel2
+     172.16.0.0/24 is subnetted, 2 subnets
+C       172.16.1.0 is directly connected, Vlan1
+S       172.16.2.0 [1/0] via 10.0.0.1
+
+DSW1(config)#
+
+
+
+
+DSW1>
+DSW1>en
+DSW1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+DSW1(config)#do sh eth load
+EtherChannel Load-Balancing Configuration:
+        src-mac
+
+EtherChannel Load-Balancing Addresses Used Per-Protocol:
+Non-IP: Source MAC address
+  IPv4: Source MAC address
+  IPv6: Source MAC address
+
+DSW1(config)#port-channel load-balance src-dst-ip
+DSW1(config)#do sh eth load
+EtherChannel Load-Balancing Configuration:
+        src-dst-ip
+
+EtherChannel Load-Balancing Addresses Used Per-Protocol:
+Non-IP: Source XOR Destination MAC address
+  IPv4: Source XOR Destination IP address
+  IPv6: Source XOR Destination IP address
+
+DSW1(config)#
+
+
+__________________________________________________________________________________________________________________________________________
+
+PC1 ping
+
+C:\>ping 172.16.1.2
+
+Pinging 172.16.1.2 with 32 bytes of data:
+
+Reply from 172.16.1.2: bytes=32 time<1ms TTL=128
+Reply from 172.16.1.2: bytes=32 time<1ms TTL=128
+Reply from 172.16.1.2: bytes=32 time<1ms TTL=128
+Reply from 172.16.1.2: bytes=32 time<1ms TTL=128
+
+Ping statistics for 172.16.1.2:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 0ms, Average = 0ms
+
+C:\>ping 172.16.1.1
+
+Pinging 172.16.1.1 with 32 bytes of data:
+
+Reply from 172.16.1.1: bytes=32 time<1ms TTL=128
+Reply from 172.16.1.1: bytes=32 time=11ms TTL=128
+Reply from 172.16.1.1: bytes=32 time=12ms TTL=128
+Reply from 172.16.1.1: bytes=32 time=13ms TTL=128
+
+Ping statistics for 172.16.1.1:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 13ms, Average = 9ms
+
+C:\>ping 172.16.1.2
+
+Pinging 172.16.1.2 with 32 bytes of data:
+
+Reply from 172.16.1.2: bytes=32 time<1ms TTL=128
+Reply from 172.16.1.2: bytes=32 time<1ms TTL=128
+Reply from 172.16.1.2: bytes=32 time<1ms TTL=128
+Reply from 172.16.1.2: bytes=32 time<1ms TTL=128
+
+Ping statistics for 172.16.1.2:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 0ms, Average = 0ms
+
+C:\>ping 172.16.1.2
+
+Pinging 172.16.1.2 with 32 bytes of data:
+
+Reply from 172.16.1.2: bytes=32 time=4ms TTL=128
+Reply from 172.16.1.2: bytes=32 time<1ms TTL=128
+Reply from 172.16.1.2: bytes=32 time<1ms TTL=128
+Reply from 172.16.1.2: bytes=32 time<1ms TTL=128
+
+Ping statistics for 172.16.1.2:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 4ms, Average = 1ms
+
+C:\>
+
+__________________________________________________________________________________________________________________________________________
+******************************************************************************************************************************************__________________________________________________________________________________________________________________________________________
+******************************************************************************************************************************************

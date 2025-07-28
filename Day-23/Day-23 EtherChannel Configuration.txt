@@ -1,0 +1,70 @@
+Day-23: EtherChannel Configuration & Load Balancing Lab
+
+Objective:
+To practice and demonstrate configuration of Layer 2 and Layer 3 EtherChannel using different negotiation protocols (LACP, PAgP, and Static) and implement load balancing strategies in a multi-switch network topology. The end goal is to ensure connectivity between hosts and server and optimize bandwidth utilization using EtherChannel load balancing.
+
+Network Topology Overview:
+ASW1 & ASW2: Access switches connected to PCs and server.
+
+DSW1 & DSW2: Distribution layer switches forming EtherChannels with access switches.
+
+IP Subnets:
+
+ASW1 LAN: 172.16.1.0/24
+
+ASW2 LAN: 172.16.2.0/24
+
+Inter-switch Network: 10.0.0.0/30
+
+VLAN1 SVI (Switched Virtual Interface) IPs are pre-configured on all switches with .254.
+
+Tasks:
+LACP Configuration:
+
+Configure a Layer 2 EtherChannel between ASW1 and DSW1 using LACP (IEEE 802.3ad).
+
+Ensure the EtherChannel is operating as a trunk link.
+
+PAgP Configuration:
+
+Configure a Layer 2 EtherChannel between ASW2 and DSW2 using PAgP (Cisco proprietary).
+
+Set the link as a trunk as well.
+
+Static EtherChannel:
+
+Configure a Layer 3 EtherChannel between DSW1 and DSW2 using manual (static) configuration.
+
+Routing Configuration:
+
+Configure static or dynamic routing to enable end devices (PC1, PC2) to reach the server (SRV1) in another subnet.
+
+Default Load Balancing Method:
+
+Identify the default load-balancing algorithm used by switches for EtherChannel (typically src-mac).
+
+Custom Load Balancing:
+
+Modify the load-balancing method on switches to use source and destination IP address (src-dst-ip) for better traffic distribution.
+
+Key Configuration Concepts:
+LACP Mode: active or passive
+
+PAgP Mode: desirable or auto
+
+Static EtherChannel: No negotiation protocol; both ends must match manually.
+
+Interface Port-Channel: Logical interface representing the EtherChannel group.
+
+Trunking: Needed when carrying multiple VLANs between switches.
+
+Routing: Either using static routes or dynamic (e.g., OSPF) to ensure PC to Server communication.
+
+Tools Used:
+Cisco Packet Tracer with devices:
+
+2960 switches (ASW1, ASW2)
+
+3560 switches (DSW1, DSW2)
+
+PCs and Server connected through FastEthernet interfaces
