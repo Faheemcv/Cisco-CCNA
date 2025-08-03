@@ -1,0 +1,60 @@
+Day-24: Floating Static Route Configuration & Route Failover Lab
+
+
+
+Objective:
+To understand how floating static routes provide backup paths in case of a primary route failure, and to observe the failover behavior using routing tables and testing connectivity.
+
+Network Description:
+This lab setup features:
+
+Enterprise A Network with:
+
+PC1 (10.0.1.10/24)
+
+SRV1 (10.0.2.10/24) connected via switches SW1 and SW2.
+
+Two routers: R1 and R2, both connected to ISP routers for external connectivity and redundancy.
+
+ISP A Network using router SPR1 and ISP backbone links.
+
+Routing Protocol:
+
+Enterprise A uses EIGRP as its dynamic routing protocol.
+
+Key Configuration Goals:
+1. Identify Routing Protocol and Route Preference:
+Check the routing tables of R1 and R2.
+
+Determine which routing protocol is running (EIGRP is visible).
+
+Identify:
+
+Route used by PC1 to reach SRV1.
+
+Route used by PC1 to access public IP 1.1.1.1 (via ISP).
+
+Test by pinging SRV1 and 1.1.1.1 from PC1.
+
+2. Configure Floating Static Routes (Backup Path):
+Add floating static routes on R1 and R2 as backup paths in case the main link (G0/2/0) fails.
+
+Assign higher administrative distance to these routes.
+
+Verify if the routes are present in routing tables before failure.
+
+These routes should not appear in the routing table as long as the main link is up.
+
+3. Simulate Link Failure and Test Failover:
+Shutdown G0/2/0 interface between R1 and R2 to simulate primary link failure.
+
+Confirm the floating static routes now appear in the routing table.
+
+Test by pinging SRV1 from PC1 again to verify the alternate path is used.
+
+Learning Outcomes:
+Understand the concept of floating static routes and how administrative distance impacts route selection.
+
+Learn how to ensure network redundancy for enterprise connectivity.
+
+Develop troubleshooting and route verification skills using ping, traceroute, and show ip route commands.
