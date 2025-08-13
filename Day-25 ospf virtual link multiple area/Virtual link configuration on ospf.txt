@@ -1,0 +1,791 @@
+Virtual link configuration on ospf multiple area
+
+
+ROUTER 1
+----------
+
+
+R1>en
+R1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R1(config)#do sh int br
+sh int br
+       ^
+% Invalid input detected at '^' marker.
+	
+R1(config)#do sh ip int br
+Interface              IP-Address      OK? Method Status                Protocol 
+GigabitEthernet0/0     192.168.1.100   YES manual up                    up 
+GigabitEthernet0/1     192.168.2.1     YES manual up                    down 
+GigabitEthernet0/2     unassigned      YES unset  administratively down down 
+Vlan1                  unassigned      YES unset  administratively down down
+R1(config)#
+R1(config)#
+R1(config)#
+R1(config)#
+R1(config)#
+R1(config)#int conf t
+               ^
+% Invalid input detected at '^' marker.
+	
+R1(config)#int g0/1
+R1(config-if)#ip add 192.168.2.1 255.255.255.0
+R1(config-if)#no sh
+R1(config-if)#ex
+R1(config)#
+R1(config)#interface GigabitEthernet0/0
+R1(config-if)#
+R1(config-if)#exit
+R1(config)#interface GigabitEthernet0/1
+R1(config-if)#do sh ip int br
+Interface              IP-Address      OK? Method Status                Protocol 
+GigabitEthernet0/0     192.168.1.100   YES manual up                    up 
+GigabitEthernet0/1     192.168.2.1     YES manual up                    down 
+GigabitEthernet0/2     unassigned      YES unset  administratively down down 
+Vlan1                  unassigned      YES unset  administratively down down
+R1(config-if)#
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1, changed state to up
+
+R1(config-if)#
+R1(config-if)#
+R1(config-if)#
+R1(config-if)#ex
+R1(config)#
+R1(config)#
+R1(config)#
+R1(config)#router ospf 100
+R1(config-router)#net 192.168.1.0 0.0.0.255 area 4
+R1(config-router)#net 192.168.2.0 0.0.0.255 area 4
+R1(config-router)#exit
+R1(config)#
+00:27:05: %OSPF-5-ADJCHG: Process 100, Nbr 1.1.1.1 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+ROUTER 2
+-----------
+
+R2>enable
+R2#
+R2#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+R2(config)#interface GigabitEthernet0/0
+R2(config-if)#no ip address
+R2(config-if)#ip address 192.168.2.2 255.255.255.0
+R2(config-if)#ip address 192.168.2.2 255.255.255.0
+R2(config-if)#no shutdown
+R2(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to up
+
+R2(config-if)#exit
+R2(config)#interface GigabitEthernet0/1
+R2(config-if)#ip address 192.168.3.1 255.255.255.0
+R2(config-if)#ip address 192.168.3.1 255.255.255.0
+R2(config-if)#no shutdown
+R2(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/1, changed state to up
+
+R2(config-if)#
+R2(config-if)#ex
+R2(config)#do sh ip int br
+Interface              IP-Address      OK? Method Status                Protocol 
+GigabitEthernet0/0     192.168.2.2     YES manual up                    up 
+GigabitEthernet0/1     192.168.3.1     YES manual up                    down 
+GigabitEthernet0/2     unassigned      YES unset  administratively down down 
+Vlan1                  unassigned      YES unset  administratively down down
+R2(config)#
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1, changed state to up
+
+
+
+R2>
+R2>
+R2>
+R2>conf t
+        ^
+% Invalid input detected at '^' marker.
+	
+R2>en
+R2#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R2(config)#
+R2(config)#
+R2(config)#
+R2(config)#router osp
+R2(config)#router ospf 100
+R2(config-router)#
+R2(config-router)#router-
+R2(config-router)#router-id 1.1.1.1
+R2(config-router)#net 192.168.2.0 0.0.0.255 area 2
+R2(config-router)#net 192.168.3.0 0.0.0.255 area 3
+R2(config-router)#net 192.168.2.0 0.0.0.255 area 4
+R2(config-router)#
+00:26:58: %OSPF-6-AREACHG: 192.168.2.0/0 changed from area 2 to area 4
+
+R2(config-router)#e
+00:27:05: %OSPF-5-ADJCHG: Process 100, Nbr 192.168.2.1 on GigabitEthernet0/0 from LOADING to FULL, Loading Done
+R2(config-router)#ex
+R2(config)#
+00:28:38: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+
+
+R2>
+R2>
+R2>
+R2>
+R2>en
+R2#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R2(config)#
+R2(config)#
+R2(config)#router ospf 100
+R2(config-router)#area 3 vir
+R2(config-router)#area 3 virtual-link 2.2.2.2
+R2(config-router)#ex
+R2(config)#
+00:46:25: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on OSPF_VL0 from LOADING to FULL, Loading Done
+
+00:47:13: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+
+00:47:15: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on OSPF_VL0 from LOADING to FULL, Loading Done
+
+
+R2>
+R2>
+R2>en conf t
+      ^
+% Invalid input detected at '^' marker.
+	
+R2>en 
+R2#
+R2#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R2(config)#
+R2(config)#do sh ip route
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default, U - per-user static route, o - ODR
+       P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+O    192.168.1.0/24 [110/2] via 192.168.2.1, 00:42:00, GigabitEthernet0/0
+     192.168.2.0/24 is variably subnetted, 2 subnets, 2 masks
+C       192.168.2.0/24 is directly connected, GigabitEthernet0/0
+L       192.168.2.2/32 is directly connected, GigabitEthernet0/0
+     192.168.3.0/24 is variably subnetted, 2 subnets, 2 masks
+C       192.168.3.0/24 is directly connected, GigabitEthernet0/1
+L       192.168.3.1/32 is directly connected, GigabitEthernet0/1
+O IA 192.168.4.0/24 [110/2] via 192.168.3.2, 00:21:42, GigabitEthernet0/1
+O    192.168.5.0/24 [110/3] via 192.168.3.2, 00:10:48, GigabitEthernet0/1
+O IA 192.168.6.0/24 [110/4] via 192.168.3.2, 00:04:18, GigabitEthernet0/1
+O IA 192.168.7.0/24 [110/5] via 192.168.3.2, 00:04:18, GigabitEthernet0/1
+
+R2(config)#
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+ROUTER 3
+----------
+
+Router>
+Router>en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#
+Router(config)#
+Router(config)#router ospf 100
+Router(config-router)#router-id 2.2.2.2
+Router(config-router)#net 192.168.3.0 0.0.0.255 area 3
+Router(config-router)#net 192.168.3.0 0.0.0.255 area 2
+00:28:38: %OSPF-5-ADJCHG: Process 100, Nbr 1.1.1.1 on GigabitEthernet0/0 from LOADING to FULL, Loading Done
+% Incomplete command.
+Router(config-router)#net 192.168.4.0 0.0.0.255 area 2
+Router(config-router)#ex
+Router(config)#
+00:32:39: %OSPF-5-ADJCHG: Process 100, Nbr 3.3.3.3 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+
+
+
+Router>
+Router>
+Router>
+Router>
+Router>en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#
+Router(config)#
+Router(config)#router ospf 1
+00:43:00: %OSPF-4-ERRRCV: Received invalid packet: mismatch area ID, from backbone area must be virtual-link but not found from 192.168.3.2, GigabitEthernet0/0
+
+00:43:10: %OSPF-4-ERRRCV: Received invalid packet: mismatch area ID, from backbone area must be virtual-link but not found from 192.168.3.2, Gigabirouter ospf 
+00:43:20: %OSPF-4-ERRRCV: Received invalid packet: mismatch area ID, from backbone area must be virtual-link but not found from 192.168.3.2, GigabitEthernet0/0
+
+% Incomplete command.
+Router(config)#
+Router(config)#
+Router(config)#
+Router(config)#router ospf 100
+00:43:30: %OSPF-4-ERRRCV: Received invalid packet: mismatch area ID, from backbone area must be virtual-link but not found from 192.168.3.2, GigabitEthernet0/0
+
+Router(config-router)#router ospf 100
+Router(config-router)#
+00:43:40: %OSPF-4-ERRRCV: Received invalid packet: mismatch area ID, from backbone area must be virtual-link but not found from 192.168.3.2, GigabitEthernet0/0
+
+00:43:50: %OSPF-4-ERRRCV: Received invalid packet: mismatch area ID, from backbone area must be virtual-link but not found from 192.168.3.2, GigabitEthernet0/0
+
+Router(config-router)#
+00:44:00: %OSPF-4-ERRRCV: Received invalid packet: mismatch area ID, from backbone area must be virtual-link but not found from 192.168.3.2, GigabitEthernet0/0
+
+Router(config-router)#
+00:44:10: %OSPF-4-ERRRCV: Received invalid packet: mismatch area ID, from backbone area must be virtual-link but not found from 192.168.3.2, GigabitEthernet0/0
+
+00:44:20: %OSPF-4-ERRRCV: Received invalid packet: mismatch area ID, from backbone area must be virtual-link but not found from 192.168.3.2, GigabitEthernet0/0
+
+Router(config-router)#do cl
+00:44:30: %OSPF-4-ERRRCV: Received invalid packet: mismatch area ID, from backbone area must be virtual-link but not found from 192.168.3.2, GigabitEthernet0/0
+
+Router(config-router)#do clear ospf proc
+00:44:40: %OSPF-4-ERRRCV: Received invalid packet: mismatch area ID, from backbone area must be virtual-link but not found from 192.168.3.2, GigabitEthernet0/0
+ess
+clear ospf process
+      ^
+% Invalid input detected at '^' marker.
+	
+Router(config-router)#do clear ospf process
+clear ospf process
+      ^
+% Invalid input detected at '^' marker.
+	
+Router(config-router)#
+00:44:50: %OSPF-4-ERRRCV: Received invalid packet: mismatch area ID, from backbone area must be virtual-link but not found from 192.168.3.2, GigabitEthernet0/0
+
+00:45:00: %OSPF-4-ERRRCV: Received invalid packet: mismatch area ID, from backbone area must be virtual-link but not found from 192.168.3.2, GigabitEthernet0/0
+
+Router(config-router)#
+00:45:10: %OSPF-4-ERRRCV: Received invalid packet: mismatch area ID, from backbone area must be virtual-link but not found from 192.168.3.2, GigabitEthernet0/0
+
+00:45:20: %OSPF-4-ERRRCV: Received invalid packet: mismatch area ID, from backbone area must be virtual-link but not found from 192.168.3.2, GigabitEthernet0/0
+ar
+00:45:30: %OSPF-4-ERRRCV: Received invalid packet: mismatch area ID, from backbone area must be virtual-link but not found from 192.168.3.2, GigabitEthernet0/
+Router(config-router)#area 3 
+00:45:40: %OSPF-4-ERRRCV: Received invalid packet: mismatch area ID, from backbone area must be virtual-link but not found from 192.168.3.2, GigabitEthernet0/0
+virtual-link
+00:45:50: %OSPF-4-ERRRCV: Received invalid packet: mismatch area ID, from backbone area must be virtual-link but not found from 192.168.3.2, GigabitEthernet0/0
+ 1.1.1.
+00:46:00: %OSPF-4-ERRRCV: Received invalid packet: mismatch area ID, from backbone area must be virtual-link but not found from 192.168.3.2, GigabitEthernet0/0
+1
+Router(config-router)#area 3 virtual-link 1.1.1.1
+Router(config-router)#ex
+Router(config)#
+00:46:25: %OSPF-5-ADJCHG: Process 100, Nbr 1.1.1.1 on OSPF_VL0 from LOADING to FULL, Loading Done
+do clear ospf process
+clear ospf process
+      ^
+% Invalid input detected at '^' marker.
+	
+Router(config)#do clear ospf process
+clear ospf process
+      ^
+% Invalid input detected at '^' marker.
+	
+Router(config)#do clear ip ospf process
+Reset ALL OSPF processes? [no]: yes
+
+Router(config)#
+00:47:08: %OSPF-5-ADJCHG: Process 100, Nbr 1.1.1.1 on GigabitEthernet0/0 from FULL to DOWN, Neighbor Down: Adjacency forced to reset
+
+00:47:08: %OSPF-5-ADJCHG: Process 100, Nbr 1.1.1.1 on GigabitEthernet0/0 from FULL to DOWN, Neighbor Down: Interface down or detached
+
+00:47:08: %OSPF-5-ADJCHG: Process 100, Nbr 3.3.3.3 on GigabitEthernet0/1 from FULL to DOWN, Neighbor Down: Adjacency forced to reset
+
+00:47:08: %OSPF-5-ADJCHG: Process 100, Nbr 3.3.3.3 on GigabitEthernet0/1 from FULL to DOWN, Neighbor Down: Interface down or detached
+
+00:47:08: %OSPF-5-ADJCHG: Process 100, Nbr 1.1.1.1 on OSPF_VL0 from FULL to DOWN, Neighbor Down: Adjacency forced to reset
+
+00:47:08: %OSPF-5-ADJCHG: Process 100, Nbr 1.1.1.1 on OSPF_VL0 from FULL to DOWN, Neighbor Down: Interface down or detached
+
+Router(config)#
+00:47:13: %OSPF-5-ADJCHG: Process 100, Nbr 1.1.1.1 on GigabitEthernet0/0 from LOADING to FULL, Loading Done
+
+00:47:14: %OSPF-5-ADJCHG: Process 100, Nbr 3.3.3.3 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+
+00:47:15: %OSPF-5-ADJCHG: Process 100, Nbr 1.1.1.1 on OSPF_VL0 from LOADING to FULL, Loading Done
+
+Router(config)#do sh ip route
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default, U - per-user static route, o - ODR
+       P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+     192.168.3.0/24 is variably subnetted, 2 subnets, 2 masks
+C       192.168.3.0/24 is directly connected, GigabitEthernet0/0
+L       192.168.3.2/32 is directly connected, GigabitEthernet0/0
+     192.168.4.0/24 is variably subnetted, 2 subnets, 2 masks
+C       192.168.4.0/24 is directly connected, GigabitEthernet0/1
+L       192.168.4.1/32 is directly connected, GigabitEthernet0/1
+
+Router(config)#router ospf 100
+Router(config-router)#area 3 virtual-link 1.1.1.1
+Router(config-router)#ex
+Router(config)#router ospf 100
+Router(config-router)#area 2 vir
+Router(config-router)#area 2 virtual-link 3.3.3.3
+Router(config-router)#ex
+Router(config)#
+00:51:00: %OSPF-5-ADJCHG: Process 100, Nbr 3.3.3.3 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+
+00:51:52: %OSPF-5-ADJCHG: Process 100, Nbr 3.3.3.3 on OSPF_VL6 from LOADING to FULL, Loading Done
+
+00:52:05: %OSPF-5-ADJCHG: Process 100, Nbr 3.3.3.3 on OSPF_VL6 from LOADING to FULL, Loading Done
+
+00:52:10: %OSPF-5-ADJCHG: Process 100, Nbr 3.3.3.3 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+
+00:52:25: %OSPF-5-ADJCHG: Process 100, Nbr 3.3.3.3 on OSPF_VL6 from LOADING to FULL, Loading Done
+
+00:52:30: %OSPF-5-ADJCHG: Process 100, Nbr 3.3.3.3 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+
+00:52:56: %OSPF-5-ADJCHG: Process 100, Nbr 3.3.3.3 on OSPF_VL6 from LOADING to FULL, Loading Done
+
+00:53:00: %OSPF-5-ADJCHG: Process 100, Nbr 3.3.3.3 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+
+00:57:27: %OSPF-5-ADJCHG: Process 100, Nbr 3.3.3.3 on OSPF_VL6 from LOADING to FULL, Loading Done
+
+00:57:30: %OSPF-5-ADJCHG: Process 100, Nbr 3.3.3.3 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+ROUTER 4
+----------
+
+Router(config)#
+Router(config)#
+Router(config)#
+00:51:00: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on GigabitEthernet0/0 from LOADING to FULL, Loading Done
+
+Router(config)#
+Router(config)#
+Router(config)#
+Router(config)#rou
+00:51:07: %OSPF-4-ERRRCV: Received invalid packet: mismatch area ID, from backbone area must be virtual-link but not found from 192.168.4.2, GigabitEthernet0
+Router(config)#router ospf 
+00:51:17: %OSPF-4-ERRRCV: Received invalid packet: mismatch area ID, from backbone area must be virtual-link but not found from 192.168.4.2, GigabitEthernet0/0
+100
+Router(config-router)#
+00:51:27: %OSPF-4-ERRRCV: Received invalid packet: mismatch area ID, from backbone area must be virtual-link but not found from 192.168.4.2, GigabitEthernet0/0
+
+Router(config-router)#area 2 vi
+Router(config-router)#area 2 virtual-link 
+00:51:37: %OSPF-4-ERRRCV: Received invalid packet: mismatch area ID, from backbone area must be virtual-link but not found from 192.168.4.2, GigabitEthernet0/0
+2.2.2.2
+Router(config-router)#ex
+Router(config)#area 2 virtual-link 2.2.2.2
+00:51:52: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on OSPF_VL0 from LOAdo clear ip ospf process
+Reset ALL OSPF processes? [no]: yes
+
+Router(config)#
+00:52:02: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on GigabitEthernet0/0 from FULL to DOWN, Neighbor Down: Adjacency forced to reset
+
+00:52:02: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on GigabitEthernet0/0 from FULL to DOWN, Neighbor Down: Interface down or detached
+
+00:52:02: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on OSPF_VL0 from FULL to DOWN, Neighbor Down: Adjacency forced to reset
+
+00:52:02: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on OSPF_VL0 from FULL to DOWN, Neighbor Down: Interface down or detached
+
+00:52:02: %OSPF-5-ADJCHG: Process 100, Nbr 192.168.6.1 on GigabitEthernet0/1 from FULL to DOWN, Neighbor Down: Adjacency forced to reset
+
+00:52:02: %OSPF-5-ADJCHG: Process 100, Nbr 192.168.6.1 on GigabitEthernet0/1 from FULL to DOWN, Neighbor Down: Interface down or detached
+
+00:52:05: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on OSPF_VL0 from LOADING to FULL, Loading Done
+
+00:52:06: %OSPF-5-ADJCHG: Process 100, Nbr 192.168.6.1 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+
+Router(config)#
+Router(config)#
+Router(config)#
+00:52:10: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on GigabitEthernet0/0 from LOADING to FULL, Loading Done
+
+Router(config)#
+Router(config)#do clear ip ospf process
+Reset ALL OSPF processes? [no]: yes
+
+Router(config)#
+00:52:18: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on GigabitEthernet0/0 from FULL to DOWN, Neighbor Down: Adjacency forced to reset
+
+00:52:18: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on GigabitEthernet0/0 from FULL to DOWN, Neighbor Down: Interface down or detached
+
+00:52:18: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on OSPF_VL0 from FULL to DOWN, Neighbor Down: Adjacency forced to reset
+
+00:52:18: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on OSPF_VL0 from FULL to DOWN, Neighbor Down: Interface down or detached
+
+00:52:18: %OSPF-5-ADJCHG: Process 100, Nbr 192.168.6.1 on GigabitEthernet0/1 from FULL to DOWN, Neighbor Down: Adjacency forced to reset
+
+00:52:18: %OSPF-5-ADJCHG: Process 100, Nbr 192.168.6.1 on GigabitEthernet0/1 from FULL to DOWN, Neighbor Down: Interface down or detached
+
+00:52:21: %OSPF-5-ADJCHG: Process 100, Nbr 192.168.6.1 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+
+00:52:25: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on OSPF_VL0 from LOADING to FULL, Loading Done
+
+00:52:30: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on GigabitEthernet0/0 from LOADING to FULL, Loading Done
+
+Router(config)#
+Router(config)#
+Router(config)#
+Router(config)#
+Router(config)#
+Router(config)#do clear ip ospf process
+Reset ALL OSPF processes? [no]: yes
+
+Router(config)#
+00:52:54: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on GigabitEthernet0/0 from FULL to DOWN, Neighbor Down: Adjacency forced to reset
+
+00:52:54: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on GigabitEthernet0/0 from FULL to DOWN, Neighbor Down: Interface down or detached
+
+00:52:54: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on OSPF_VL0 from FULL to DOWN, Neighbor Down: Adjacency forced to reset
+
+00:52:54: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on OSPF_VL0 from FULL to DOWN, Neighbor Down: Interface down or detached
+
+00:52:54: %OSPF-5-ADJCHG: Process 100, Nbr 192.168.6.1 on GigabitEthernet0/1 from FULL to DOWN, Neighbor Down: Adjacency forced to reset
+
+00:52:54: %OSPF-5-ADJCHG: Process 100, Nbr 192.168.6.1 on GigabitEthernet0/1 from FULL to DOWN, Neighbor Down: Interface down or detached
+
+00:52:56: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on OSPF_VL0 from LOADING to FULL, Loading Done
+
+00:52:56: %OSPF-5-ADJCHG: Process 100, Nbr 192.168.6.1 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+
+Router(config)#do sh 
+00:53:00: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on GigabitEthernet0/0 from LOADING to FULL, Loading Done
+ip route
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default, U - per-user static route, o - ODR
+       P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+O IA 192.168.3.0/24 [110/2] via 192.168.4.1, 00:00:27, GigabitEthernet0/0
+     192.168.4.0/24 is variably subnetted, 2 subnets, 2 masks
+C       192.168.4.0/24 is directly connected, GigabitEthernet0/0
+L       192.168.4.2/32 is directly connected, GigabitEthernet0/0
+     192.168.5.0/24 is variably subnetted, 2 subnets, 2 masks
+C       192.168.5.0/24 is directly connected, GigabitEthernet0/1
+L       192.168.5.1/32 is directly connected, GigabitEthernet0/1
+O IA 192.168.6.0/24 [110/2] via 192.168.5.2, 00:00:48, GigabitEthernet0/1
+O IA 192.168.7.0/24 [110/3] via 192.168.5.2, 00:00:48, GigabitEthernet0/1
+
+Router(config)#do ping 192.168.5.2
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 192.168.5.2, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 0/0/0 ms
+
+Router(config)#do clear ip ospf process
+Reset ALL OSPF processes? [no]: yes
+
+Router(config)#
+00:57:24: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on GigabitEthernet0/0 from FULL to DOWN, Neighbor Down: Adjacency forced to reset
+
+00:57:24: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on GigabitEthernet0/0 from FULL to DOWN, Neighbor Down: Interface down or detached
+
+00:57:24: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on OSPF_VL0 from FULL to DOWN, Neighbor Down: Adjacency forced to reset
+
+00:57:24: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on OSPF_VL0 from FULL to DOWN, Neighbor Down: Interface down or detached
+
+00:57:24: %OSPF-5-ADJCHG: Process 100, Nbr 192.168.6.1 on GigabitEthernet0/1 from FULL to DOWN, Neighbor Down: Adjacency forced to reset
+
+00:57:24: %OSPF-5-ADJCHG: Process 100, Nbr 192.168.6.1 on GigabitEthernet0/1 from FULL to DOWN, Neighbor Down: Interface down or detached
+
+00:57:27: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on OSPF_VL0 from LOADING to FULL, Loading Done
+
+00:57:27: %OSPF-5-ADJCHG: Process 100, Nbr 192.168.6.1 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+
+00:57:30: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on GigabitEthernet0/0 from LOADING to FULL, Loading Done
+
+00:57:57: %OSPF-5-ADJCHG: Process 100, Nbr 192.168.6.1 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+
+Router(config)#
+Router(config)#do sh ip route
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default, U - per-user static route, o - ODR
+       P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+O IA 192.168.1.0/24 [110/4] via 192.168.4.1, 00:00:25, GigabitEthernet0/0
+O IA 192.168.2.0/24 [110/3] via 192.168.4.1, 00:00:25, GigabitEthernet0/0
+O IA 192.168.3.0/24 [110/2] via 192.168.4.1, 00:05:51, GigabitEthernet0/0
+     192.168.4.0/24 is variably subnetted, 2 subnets, 2 masks
+C       192.168.4.0/24 is directly connected, GigabitEthernet0/0
+L       192.168.4.2/32 is directly connected, GigabitEthernet0/0
+     192.168.5.0/24 is variably subnetted, 2 subnets, 2 masks
+C       192.168.5.0/24 is directly connected, GigabitEthernet0/1
+L       192.168.5.1/32 is directly connected, GigabitEthernet0/1
+O IA 192.168.6.0/24 [110/2] via 192.168.5.2, 00:06:12, GigabitEthernet0/1
+O IA 192.168.7.0/24 [110/3] via 192.168.5.2, 00:06:12, GigabitEthernet0/1
+
+Router(config)# do sh ip int br
+Interface              IP-Address      OK? Method Status                Protocol 
+GigabitEthernet0/0     192.168.4.2     YES manual up                    up 
+GigabitEthernet0/1     192.168.5.1     YES manual up                    up 
+GigabitEthernet0/2     unassigned      YES unset  administratively down down 
+Vlan1                  unassigned      YES unset  administratively down down
+Router(config)#router ospf 100
+Router(config-router)#
+Router(config-router)#
+Router(config-router)#area 2 vir
+Router(config-router)#area 2 virtual-link 2.2.2.2
+Router(config-router)#ex
+Router(config)#do sh ip route
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default, U - per-user static route, o - ODR
+       P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+O IA 192.168.1.0/24 [110/4] via 192.168.4.1, 00:00:34, GigabitEthernet0/0
+O IA 192.168.2.0/24 [110/3] via 192.168.4.1, 00:00:34, GigabitEthernet0/0
+O IA 192.168.3.0/24 [110/2] via 192.168.4.1, 00:12:50, GigabitEthernet0/0
+     192.168.4.0/24 is variably subnetted, 2 subnets, 2 masks
+C       192.168.4.0/24 is directly connected, GigabitEthernet0/0
+L       192.168.4.2/32 is directly connected, GigabitEthernet0/0
+     192.168.5.0/24 is variably subnetted, 2 subnets, 2 masks
+C       192.168.5.0/24 is directly connected, GigabitEthernet0/1
+L       192.168.5.1/32 is directly connected, GigabitEthernet0/1
+O IA 192.168.6.0/24 [110/2] via 192.168.5.2, 00:13:11, GigabitEthernet0/1
+O IA 192.168.7.0/24 [110/3] via 192.168.5.2, 00:13:11, GigabitEthernet0/1
+
+Router(config)#
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+
+ROUTER 5
+-----------
+Router>enable
+Router#
+Router#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#interface GigabitEthernet0/0
+Router(config-if)#ip address 192.168.5.2 255.255.255.0
+Router(config-if)#ip address 192.168.5.2 255.255.255.0
+Router(config-if)#no shutdown
+Router(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to up
+
+Router(config-if)#exit
+Router(config)#interface GigabitEthernet0/1
+Router(config-if)#ip address 192.168.6.1 255.255.255.0
+Router(config-if)#ip address 192.168.6.1 255.255.255.0
+Router(config-if)#no shutdown
+Router(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1, changed state to up
+
+Router(config-if)#ex
+Router(config)#
+
+
+
+Router>
+Router>
+Router>
+Router>
+Router>en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#
+Router(config)#
+Router(config)#router ospf 100
+Router(config-router)#net 192.168.5.0 0.0.0.255 area 0
+Router(config-router)#net 192.168.6.0 0.0.0.255 area 1
+00:34:16: %OSPF-5-ADJCHG: Process 100, Nbr 3.3.3.3 on GigabitEthernet0/0 from LOADING to FULL, Loading Done
+
+Router(config-router)#net 192.168.6.0 0.0.0.255 area 1
+Router(config-router)#ex
+Router(config)#
+00:36:03: %OSPF-5-ADJCHG: Process 100, Nbr 192.168.7.100 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+
+
+
+00:50:56: %OSPF-5-ADJCHG: Process 100, Nbr 3.3.3.3 on GigabitEthernet0/0 from LOADING to FULL, Loading Done
+
+00:52:06: %OSPF-5-ADJCHG: Process 100, Nbr 3.3.3.3 on GigabitEthernet0/0 from LOADING to FULL, Loading Done
+
+00:52:21: %OSPF-5-ADJCHG: Process 100, Nbr 3.3.3.3 on GigabitEthernet0/0 from LOADING to FULL, Loading Done
+
+00:52:56: %OSPF-5-ADJCHG: Process 100, Nbr 3.3.3.3 on GigabitEthernet0/0 from LOADING to FULL, Loading Done
+
+
+Router>
+Router>
+Router>en
+Router#
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#
+00:57:27: %OSPF-5-ADJCHG: Process 100, Nbr 3.3.3.3 on GigabitEthernet0/0 from LOADING to FULL, Loading Done
+
+Router(config)#
+Router(config)#
+Router(config)#do clear ip ospf process
+Reset ALL OSPF processes? [no]: yes
+
+Router(config)#
+00:57:55: %OSPF-5-ADJCHG: Process 100, Nbr 3.3.3.3 on GigabitEthernet0/0 from FULL to DOWN, Neighbor Down: Adjacency forced to reset
+
+00:57:55: %OSPF-5-ADJCHG: Process 100, Nbr 3.3.3.3 on GigabitEthernet0/0 from FULL to DOWN, Neighbor Down: Interface down or detached
+
+00:57:55: %OSPF-5-ADJCHG: Process 100, Nbr 192.168.7.100 on GigabitEthernet0/1 from FULL to DOWN, Neighbor Down: Adjacency forced to reset
+
+00:57:55: %OSPF-5-ADJCHG: Process 100, Nbr 192.168.7.100 on GigabitEthernet0/1 from FULL to DOWN, Neighbor Down: Interface down or detached
+
+00:57:57: %OSPF-5-ADJCHG: Process 100, Nbr 3.3.3.3 on GigabitEthernet0/0 from LOADING to FULL, Loading Done
+
+Router(config)#do
+00:57:59: %OSPF-5-ADJCHG: Process 100, Nbr 192.168.7.100 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+ sh ip route
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default, U - per-user static route, o - ODR
+       P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+O IA 192.168.1.0/24 [110/5] via 192.168.5.1, 00:06:01, GigabitEthernet0/0
+O IA 192.168.2.0/24 [110/4] via 192.168.5.1, 00:06:01, GigabitEthernet0/0
+O IA 192.168.3.0/24 [110/3] via 192.168.5.1, 00:06:01, GigabitEthernet0/0
+O IA 192.168.4.0/24 [110/2] via 192.168.5.1, 00:05:21, GigabitEthernet0/0
+     192.168.5.0/24 is variably subnetted, 2 subnets, 2 masks
+C       192.168.5.0/24 is directly connected, GigabitEthernet0/0
+L       192.168.5.2/32 is directly connected, GigabitEthernet0/0
+     192.168.6.0/24 is variably subnetted, 2 subnets, 2 masks
+C       192.168.6.0/24 is directly connected, GigabitEthernet0/1
+L       192.168.6.1/32 is directly connected, GigabitEthernet0/1
+O    192.168.7.0/24 [110/2] via 192.168.6.2, 00:21:53, GigabitEthernet0/1
+
+Router(config)#
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+ROUTER 6
+----------
+
+Router>enable
+Router#
+Router#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#interface GigabitEthernet0/0
+Router(config-if)#ip address 192.168.6.2 255.255.255.0
+Router(config-if)#ip address 192.168.6.2 255.255.255.0
+Router(config-if)#no shutdown
+Router(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to up
+
+Router(config-if)#exit
+Router(config)#interface GigabitEthernet0/1
+Router(config-if)#ip address 192.168.7.100 255.255.255.0
+Router(config-if)#ip address 192.168.7.100 255.255.255.0
+Router(config-if)#no shutdown
+Router(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1, changed state to up
+
+Router(config-if)#ex
+Router(config)#
+
+
+Router>
+Router>
+Router>
+Router>
+Router>
+Router>
+Router>en
+Router#
+Router#
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#
+Router(config)#
+Router(config)#router ospf 100
+Router(config-router)#net 192.168.6.0 0.0.0.255 area 1
+Router(config-router)#net 192.168.7.0 0.0.0.255 area 1
+00:36:03: %OSPF-5-ADJCHG: Process 100, Nbr 192.168.6.1 on GigabitEthernet0/0 from LOADING to FULL, Loading Done
+
+Router(config-router)#net 192.168.7.0 0.0.0.255 area 1
+Router(config-router)#ex
+Router(config)#
+
+
+
+
+Router>
+Router>
+Router>
+Router>conf t
+            ^
+% Invalid input detected at '^' marker.
+	
+Router>en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#
+Router(config)#
+Router(config)#
+Router(config)#do sh ip route
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default, U - per-user static route, o - ODR
+       P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+O IA 192.168.1.0/24 [110/6] via 192.168.6.1, 00:04:26, GigabitEthernet0/0
+O IA 192.168.2.0/24 [110/5] via 192.168.6.1, 00:04:26, GigabitEthernet0/0
+O IA 192.168.3.0/24 [110/4] via 192.168.6.1, 00:04:26, GigabitEthernet0/0
+O IA 192.168.4.0/24 [110/3] via 192.168.6.1, 00:03:46, GigabitEthernet0/0
+O IA 192.168.5.0/24 [110/2] via 192.168.6.1, 00:20:23, GigabitEthernet0/0
+     192.168.6.0/24 is variably subnetted, 2 subnets, 2 masks
+C       192.168.6.0/24 is directly connected, GigabitEthernet0/0
+L       192.168.6.2/32 is directly connected, GigabitEthernet0/0
+     192.168.7.0/24 is variably subnetted, 2 subnets, 2 masks
+C       192.168.7.0/24 is directly connected, GigabitEthernet0/1
+L       192.168.7.100/32 is directly connected, GigabitEthernet0/1
+
+Router(config)#
+00:57:59: %OSPF-5-ADJCHG: Process 100, Nbr 192.168.6.1 on GigabitEthernet0/0 from LOADING to FULL, Loading Done
